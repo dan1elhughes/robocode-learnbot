@@ -18,16 +18,12 @@ public class LearnBot extends Robot {
 		this.triggers = this.readIn();
 
 		try {
-			this.init();
-
 			while (this.getOthers() > 0) {
 				this.idle();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		this.writeOut();
 	}
 
 	private ArrayList<Trigger> readIn() {
@@ -46,7 +42,7 @@ public class LearnBot extends Robot {
 
 		ArrayList<Trigger> triggers = new ArrayList<>();
 
-		for (String line : lines ) {
+		for (String line : lines) {
 			String[] parts = line.split(":");
 			int trigger = Integer.parseInt(parts[0], 10);
 			Trigger t = new Trigger(trigger);
@@ -54,9 +50,11 @@ public class LearnBot extends Robot {
 
 			String[] actions = parts[1].split(",");
 			for (String action : actions) {
-				Action a = new Action(Integer.parseInt(action, 10));
-				t.registerAction(a);
-				System.out.println("\t : " + a.getName());
+				if (action.length() > 0) {
+					Action a = new Action(Integer.parseInt(action, 10));
+					t.registerAction(a);
+					System.out.println("\t : " + a.getName());
+				}
 			}
 
 			triggers.add(t);
@@ -64,14 +62,6 @@ public class LearnBot extends Robot {
 		}
 
 		return triggers;
-	}
-
-	private void writeOut() {
-
-	}
-
-	private void init() {
-
 	}
 
 	private void idle() {

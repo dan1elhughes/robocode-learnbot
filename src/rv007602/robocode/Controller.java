@@ -1,88 +1,61 @@
 package rv007602.robocode;
 
-import robocode.control.BattleSpecification;
-import robocode.control.BattlefieldSpecification;
-import robocode.control.RobocodeEngine;
-import robocode.control.RobotSpecification;
-import robocode.control.events.BattleAdaptor;
-import robocode.control.events.BattleCompletedEvent;
-import robocode.control.events.BattleErrorEvent;
-import robocode.control.events.BattleMessageEvent;
-
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Controller {
 
-	private final static String[] enemies = {"sample.SittingDuck", "sample.SittingDuck"};
-	private final static int roundsPerBattle = 3;
+	public static void main(String[] args) throws Exception {
 
-	public static void main(String[] args) {
-		for (int i = 0; i < 20; i++) {
-			System.out.println(i + " : " + Controller.getFitness());
-		}
-	}
+		int generations = 10;
+		int survivors = 6;
+		int populationSize = 10;
+		float mutationRate = 1f;
+		float crossoverRate = 0.5f;
 
-	private static int getFitness() {
+		String[] enemies = {"sample.SittingDuck"};
+		Fitness.setEnemies(enemies);
 
-		// Wrapped in an object to prevent "concurrent modification" error
-		// from the battlelistener
-		ArrayList<Integer> scores = new ArrayList<>();
+		Fitness.setRoundsPerBattle(3);
 
-		// Disable log messages from Robocode
-		RobocodeEngine.setLogMessagesEnabled(false);
+		Fitness.setVisible(false);
 
-		// Create the RobocodeEngine
-		RobocodeEngine engine = new RobocodeEngine(new java.io.File("c:/robocode"));
+		Population population = new Population(populationSize);
+		Fitness.analyze(population);
 
-		// Add our own battle listener to the RobocodeEngine
-		engine.addBattleListener(new BattleAdaptor() {
-			// Called when the battle is completed successfully with battle results
-			public void onBattleCompleted(BattleCompletedEvent e) {
-				for (robocode.BattleResults battleResult : e.getSortedResults()) {
-					if (battleResult.getTeamLeaderName().equals("rv007602.robocode.LearnBot*")) {
-						scores.add(battleResult.getScore());
-					}
-				}
-			}
+		FileWriter output = new FileWriter("out.csv");
 
-			// Called when the game sends out an information message during the battle
-			public void onBattleMessage(BattleMessageEvent e) {
-				if (e.getMessage().contains("cleaning")) {
-					System.out.println("Msg> " + e.getMessage());
-				}
-			}
+		String headings = "Generation";
 
-			// Called when the game sends out an error message during the battle
-			public void onBattleError(BattleErrorEvent e) {
-				System.out.println("Err> " + e.getError());
-			}
-
-		});
-
-		// Show/hide the battle
-		engine.setVisible(false);
-
-		// Setup the battle
-		BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
-
-		// Credit to Rhys Streefland for discovering that it needs
-		// an asterisk after package name for some reason
-		String bots = "rv007602.robocode.LearnBot*";
-
-		for (String enemy : Controller.enemies) {
-			bots += "," + enemy;
+		for (int i = 0; i < populationSize; i++) {
+			headings += ",FitnessOf" + (i+1);
 		}
 
-		RobotSpecification[] selectedRobots = engine.getLocalRepository(bots);
+		output.write(headings + "\n");
 
-		BattleSpecification battleSpec = new BattleSpecification(Controller.roundsPerBattle, battlefield, selectedRobots);
+		output.write(String.format("%d%s\n", 0, population));
 
-		// Run the battle and wait
-		engine.runBattle(battleSpec, true);
+		int i = 1;
+//		while (i++ >= generations) {
+			System.out.println("== Generation " + i);
+			Population nextGeneration = population.select(survivors);
 
-		// Cleanup
-		engine.close();
+			Population children = nextGeneration.crossover();
+			children.mutate(mutationRate);
 
-		return scores.get(0);
+			population = nextGeneration;
+			population.add(children);
+
+			population.cullTo(populationSize);
+
+//			Fitness.analyze(population);
+
+			output.write(String.format("%d%s\n", i, population));
+			System.out.println("Generation " + i + " fittest : " + population.getFittest().getFitness());
+//		}
+
+		output.flush();
+		System.exit(0);
 	}
+
 }
