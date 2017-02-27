@@ -3,7 +3,7 @@ package rv007602.robocode;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Individual {
+class Individual {
 	private int fitness;
 	private ArrayList<Trigger> phenotype = new ArrayList<>();
 
@@ -23,9 +23,6 @@ public class Individual {
 	}
 
 	public static Individual[] crossover(Individual parent1, Individual parent2) {
-		// TODO: This function doesn't do anything!
-		// TODO: Create two blank children and pick triggers off each parent.
-
 		ArrayList<Trigger> triggers1 = parent1.getPhenotype();
 		ArrayList<Trigger> triggers2 = parent2.getPhenotype();
 

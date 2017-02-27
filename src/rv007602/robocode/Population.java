@@ -3,7 +3,7 @@ package rv007602.robocode;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Population {
+class Population {
 	private final ArrayList<Individual> individuals;
 
 	public Population(int populationSize) {

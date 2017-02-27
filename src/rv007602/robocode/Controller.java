@@ -30,7 +30,7 @@ class Controller {
 		String headings = "Generation";
 
 		for (int i = 0; i < populationSize; i++) {
-			headings += ",FitnessOf" + (i+1);
+			headings += ",FitnessOf" + (i + 1);
 		}
 
 		output.write(headings + "\n");

@@ -96,7 +96,7 @@ class Fitness {
 	}
 
 	private static int getFitness() {
-		Fitness.engine.runBattle(battleSpec, true);
+		Fitness.engine.runBattle(Fitness.battleSpec, true);
 
 		return Fitness.score.get(0);
 	}
