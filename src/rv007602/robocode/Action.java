@@ -1,6 +1,7 @@
 package rv007602.robocode;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 class Action {
 	static final int SIT = 0;
@@ -14,7 +15,6 @@ class Action {
 	static final int BACK = 8;
 	static final int SPIN = 9;
 
-	private static final Random randomSeed = new Random();
 	private final int action;
 	private String name;
 
@@ -56,7 +56,7 @@ class Action {
 	}
 
 	public Action() {
-		this(Action.randomSeed.nextInt(10));
+		this(ThreadLocalRandom.current().nextInt(0, 10));
 	}
 
 	public int getAction() {

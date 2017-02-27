@@ -2,27 +2,40 @@ package rv007602.robocode;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.concurrent.ThreadLocalRandom;
 
 class Individual {
 	private int fitness;
 	private ArrayList<Trigger> phenotype = new ArrayList<>();
 
+	private Trigger getRandomTrigger() {
+		return this.phenotype.get(ThreadLocalRandom.current().nextInt(0, phenotype.size()));
+	}
+
 	public Individual() {
 		ArrayList<Trigger> phenotype = new ArrayList<>();
 
-		Trigger onIdle = new Trigger(Trigger.IDLE);
-		onIdle.registerAction(new Action(Action.BEAR_LEFT));
-		phenotype.add(onIdle);
+		Trigger idle = new Trigger(Trigger.IDLE);
+		Trigger bullet_hit = new Trigger(Trigger.BULLET_HIT);
+		Trigger bullet_missed = new Trigger(Trigger.BULLET_MISSED);
+		Trigger hit_by_bullet = new Trigger(Trigger.HIT_BY_BULLET);
+		Trigger hit_robot = new Trigger(Trigger.HIT_ROBOT);
+		Trigger hit_wall = new Trigger(Trigger.HIT_WALL);
+		Trigger scanned_robot = new Trigger(Trigger.SCANNED_ROBOT);
 
-		Trigger onScannedRobot = new Trigger(Trigger.SCANNED_ROBOT);
-		onScannedRobot.registerAction(new Action(Action.FIRE));
-		onScannedRobot.registerAction(new Action(Action.AHEAD));
-		phenotype.add(onScannedRobot);
+		phenotype.add(idle);
+		phenotype.add(bullet_hit);
+		phenotype.add(bullet_missed);
+		phenotype.add(hit_by_bullet);
+		phenotype.add(hit_robot);
+		phenotype.add(hit_wall);
+		phenotype.add(scanned_robot);
 
 		this.phenotype = phenotype;
 	}
 
-	public static Individual[] crossover(Individual parent1, Individual parent2) {
+	public static Individual[] crossover(Individual parent1, Individual parent2, float crossoverRate) {
 		ArrayList<Trigger> triggers1 = parent1.getPhenotype();
 		ArrayList<Trigger> triggers2 = parent2.getPhenotype();
 
@@ -37,13 +50,16 @@ class Individual {
 
 		// Add half of the triggers to each child.
 		int length = triggers.size();
-		int half = length / 2;
+		float half = length * crossoverRate;
 		while (half-- > 0) {
 			childTriggers1.add(triggers.remove(0));
 		}
 		while (triggers.size() > 0) {
 			childTriggers2.add(triggers.remove(0));
 		}
+
+		childTriggers1.sort(Comparator.comparingInt(Trigger::getEvent));
+		childTriggers2.sort(Comparator.comparingInt(Trigger::getEvent));
 
 		Individual child1 = new Individual();
 		child1.setPhenotype(childTriggers1);
@@ -60,6 +76,22 @@ class Individual {
 
 	private void setPhenotype(ArrayList<Trigger> phenotype) {
 		this.phenotype = phenotype;
+	}
+
+	public String getBehaviour() {
+		String behaviour = "";
+
+		for (Trigger trigger : this.phenotype) {
+			behaviour += trigger.getName() + "(";
+
+			for (Action action : trigger.getActions()) {
+				behaviour += action.getName() + ",";
+			}
+
+			behaviour += "), ";
+		}
+
+		return behaviour;
 	}
 
 	public String getGenotype() {
@@ -88,9 +120,15 @@ class Individual {
 	}
 
 	public void mutate() {
-		ArrayList<Trigger> phenotype = this.getPhenotype();
+		Trigger x = this.getRandomTrigger();
 
-//		System.out.print(true);
+		int chance = ThreadLocalRandom.current().nextInt(100);
+
+		if (chance > 90) {
+			x.removeRandomAction();
+		} else {
+			x.registerAction(new Action());
+		}
 	}
 
 }

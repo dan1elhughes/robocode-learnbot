@@ -51,7 +51,7 @@ class Population {
 		this.individuals.add(individual);
 	}
 
-	public Population crossover() {
+	public Population crossover(float crossoverRate) {
 		ArrayList<Individual[]> pairs = this.getPairs();
 		ArrayList<Individual> children = new ArrayList<>();
 
@@ -59,7 +59,7 @@ class Population {
 			Individual parent1 = pair[0];
 			Individual parent2 = pair[1];
 
-			Individual[] offspring = Individual.crossover(parent1, parent2);
+			Individual[] offspring = Individual.crossover(parent1, parent2, crossoverRate);
 			Collections.addAll(children, offspring);
 		}
 

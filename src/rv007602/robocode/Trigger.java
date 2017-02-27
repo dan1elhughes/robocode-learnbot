@@ -1,7 +1,7 @@
 package rv007602.robocode;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 class Trigger {
 
@@ -13,7 +13,6 @@ class Trigger {
 	public static final int HIT_WALL = 5;
 	public static final int SCANNED_ROBOT = 6;
 
-	private static final Random randomSeed = new Random();
 	private final int event;
 
 	private final ArrayList<Action> actions = new ArrayList<>();
@@ -21,7 +20,7 @@ class Trigger {
 	private String name;
 
 	public Trigger() {
-		this(Trigger.randomSeed.nextInt(7));
+		this(ThreadLocalRandom.current().nextInt(0, 7));
 	}
 
 	public Trigger(int event) {
@@ -64,6 +63,12 @@ class Trigger {
 	}
 
 	public void registerAction(Action action) {
+		for (Action a : actions) {
+			if (a.getAction() == action.getAction()) {
+				return;
+			}
+		}
+
 		this.actions.add(action);
 	}
 
@@ -81,5 +86,21 @@ class Trigger {
 
 	public String getName() {
 		return name;
+	}
+
+	public void removeRandomAction() {
+		ArrayList<Action> actions = this.getActions();
+
+		int size = actions.size();
+
+		if (size > 0) {
+			int index = ThreadLocalRandom.current().nextInt(actions.size());
+			Action a = actions.remove(index);
+
+			System.out.println("Removed action: " + a.getName());
+
+			actions.trimToSize();
+		}
+
 	}
 }

@@ -2,17 +2,17 @@ package rv007602.robocode;
 
 import java.io.FileWriter;
 
-class Controller {
+public class Controller {
 
 	public static void main(String[] args) throws Exception {
 
 		int generations = 10;
 		int survivors = 6;
 		int populationSize = 10;
-		float mutationRate = 1f;
+		float mutationRate = 0.5f;
 		float crossoverRate = 0.5f;
 
-		String[] enemies = {"sample.SittingDuck"};
+		String[] enemies = {"sample.SpinBot"};
 
 		Fitness.setEnemies(enemies);
 
@@ -42,7 +42,7 @@ class Controller {
 			System.out.println("== Generation " + i);
 			Population nextGeneration = population.select(survivors);
 
-			Population children = nextGeneration.crossover();
+			Population children = nextGeneration.crossover(crossoverRate);
 			children.mutate(mutationRate);
 
 			population = nextGeneration;

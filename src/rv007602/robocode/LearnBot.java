@@ -18,7 +18,7 @@ public class LearnBot extends Robot {
 		this.triggers = this.readIn();
 
 		try {
-			while (this.getOthers() > 0) {
+			while (true) {
 				this.idle();
 			}
 		} catch (Exception e) {
@@ -63,6 +63,7 @@ public class LearnBot extends Robot {
 
 		return triggers;
 	}
+
 
 	private void idle() {
 		Behaviour.apply(this, Trigger.where(Trigger.IDLE, this.triggers));
