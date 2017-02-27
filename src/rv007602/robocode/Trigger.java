@@ -3,7 +3,7 @@ package rv007602.robocode;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Trigger {
+class Trigger {
 
 	public static final int IDLE = 0;
 	public static final int BULLET_HIT = 1;
@@ -13,10 +13,10 @@ public class Trigger {
 	public static final int HIT_WALL = 5;
 	public static final int SCANNED_ROBOT = 6;
 
-	private static Random randomSeed = new Random();
+	private static final Random randomSeed = new Random();
 	private final int event;
 
-	private ArrayList<Action> actions = new ArrayList<>();
+	private final ArrayList<Action> actions = new ArrayList<>();
 
 	private String name;
 

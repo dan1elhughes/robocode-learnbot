@@ -1,9 +1,8 @@
 package rv007602.robocode;
 
 import java.io.FileWriter;
-import java.util.ArrayList;
 
-public class Controller {
+class Controller {
 
 	public static void main(String[] args) throws Exception {
 
@@ -14,11 +13,14 @@ public class Controller {
 		float crossoverRate = 0.5f;
 
 		String[] enemies = {"sample.SittingDuck"};
+
 		Fitness.setEnemies(enemies);
 
-		Fitness.setRoundsPerBattle(3);
+		Fitness.setRoundsPerBattle(2);
 
-		Fitness.setVisible(false);
+		Fitness.setVisible(true);
+
+		Fitness.initialize();
 
 		Population population = new Population(populationSize);
 		Fitness.analyze(population);
@@ -36,7 +38,7 @@ public class Controller {
 		output.write(String.format("%d%s\n", 0, population));
 
 		int i = 1;
-//		while (i++ >= generations) {
+		while (i++ <= generations) {
 			System.out.println("== Generation " + i);
 			Population nextGeneration = population.select(survivors);
 
@@ -48,11 +50,13 @@ public class Controller {
 
 			population.cullTo(populationSize);
 
-//			Fitness.analyze(population);
+			Fitness.analyze(population);
 
 			output.write(String.format("%d%s\n", i, population));
 			System.out.println("Generation " + i + " fittest : " + population.getFittest().getFitness());
-//		}
+		}
+
+		Fitness.cleanUp();
 
 		output.flush();
 		System.exit(0);

@@ -57,11 +57,11 @@ public class Individual {
 		return new Individual[]{parent1, parent2, child1, child2};
 	}
 
-	public ArrayList<Trigger> getPhenotype() {
+	private ArrayList<Trigger> getPhenotype() {
 		return phenotype;
 	}
 
-	public void setPhenotype(ArrayList<Trigger> phenotype) {
+	private void setPhenotype(ArrayList<Trigger> phenotype) {
 		this.phenotype = phenotype;
 	}
 
@@ -93,7 +93,7 @@ public class Individual {
 	public void mutate() {
 		ArrayList<Trigger> phenotype = this.getPhenotype();
 
-		System.out.print(true);
+//		System.out.print(true);
 	}
 
 }

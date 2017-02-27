@@ -2,10 +2,9 @@ package rv007602.robocode;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 public class Population {
-	private ArrayList<Individual> individuals;
+	private final ArrayList<Individual> individuals;
 
 	public Population(int populationSize) {
 		this.individuals = new ArrayList<>();

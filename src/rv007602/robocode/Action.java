@@ -2,7 +2,7 @@ package rv007602.robocode;
 
 import java.util.Random;
 
-public class Action {
+class Action {
 	static final int SIT = 0;
 	static final int FIRE = 1;
 	static final int SNIPE = 2;

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class LearnBot extends Robot {
+class LearnBot extends Robot {
 
 	private ArrayList<Trigger> triggers;
 

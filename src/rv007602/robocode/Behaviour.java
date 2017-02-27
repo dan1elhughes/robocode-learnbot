@@ -11,7 +11,7 @@ class Behaviour {
 		}
 	}
 
-	static void apply(LearnBot bot, Action action) {
+	private static void apply(LearnBot bot, Action action) {
 		try {
 
 			System.out.println("Applying behaviour: " + action.getName());
