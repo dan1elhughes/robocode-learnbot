@@ -82,8 +82,7 @@ class Population {
 
 		while (this.individuals.size() > 0) {
 			int index = (int) ((Math.random() * this.individuals.size()));
-			parent = individuals.get(index);
-			individuals.remove(index);
+			parent = individuals.remove(index);
 			pair.add(parent);
 
 			if (pair.size() == 2) {

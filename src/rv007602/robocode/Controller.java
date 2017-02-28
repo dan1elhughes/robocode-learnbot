@@ -6,24 +6,24 @@ public class Controller {
 
 	public static void main(String[] args) throws Exception {
 
-		int generations = 10;
+		int generations = 40;
 		int survivors = 6;
 		int populationSize = 10;
-		float mutationRate = 0.5f;
+		float mutationRate = 0.2f;
 		float crossoverRate = 0.5f;
 
-		String[] enemies = {"sample.SpinBot"};
+		String[] enemies = {"sample.SittingDuck"};
 
 		Fitness.setEnemies(enemies);
 
 		Fitness.setRoundsPerBattle(2);
 
-		Fitness.setVisible(true);
+		Fitness.setVisible(false);
 
 		Fitness.initialize();
 
 		Population population = new Population(populationSize);
-		Fitness.analyze(population);
+		Fitness.analyze(population, 0);
 
 		FileWriter output = new FileWriter("out.csv");
 
@@ -33,12 +33,14 @@ public class Controller {
 			headings += ",FitnessOf" + (i + 1);
 		}
 
+		headings += ",Fittest";
+
 		output.write(headings + "\n");
 
-		output.write(String.format("%d%s\n", 0, population));
+		output.write(String.format("%d%s,%d\n", 0, population, population.getFittest().getFitness()));
 
-		int i = 1;
-		while (i++ <= generations) {
+		int i = 0;
+		while (i++ < generations) {
 			System.out.println("== Generation " + i);
 			Population nextGeneration = population.select(survivors);
 
@@ -50,15 +52,16 @@ public class Controller {
 
 			population.cullTo(populationSize);
 
-			Fitness.analyze(population);
+			Fitness.analyze(population, i);
 
-			output.write(String.format("%d%s\n", i, population));
-			System.out.println("Generation " + i + " fittest : " + population.getFittest().getFitness());
+			output.write(String.format("%d%s,%d\n", i, population, population.getFittest().getFitness()));
 		}
 
 		Fitness.cleanUp();
 
 		output.flush();
+		output.close();
+
 		System.exit(0);
 	}
 

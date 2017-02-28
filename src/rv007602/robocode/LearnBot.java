@@ -2,58 +2,79 @@ package rv007602.robocode;
 
 import robocode.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class LearnBot extends Robot {
+public class LearnBot extends AdvancedRobot {
 
 	private ArrayList<Trigger> triggers;
+	public boolean finished = false;
 
 	public void run() {
-		this.triggers = this.readIn();
+
+		int i = 0;
 
 		try {
-			while (true) {
-				this.idle();
-			}
+			this.triggers = this.readIn();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		while (!finished && i < 10000) {
+			try {
+				this.idle();
+				System.out.println(++i);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	private ArrayList<Trigger> readIn() {
+	public void onDeath(DeathEvent e) {
+		this.finished = true;
+	}
+
+	public void onWin(WinEvent e) {
+		this.finished = true;
+	}
+
+	public void onRoundEnded(RoundEndedEvent e) {
+		this.finished = true;
+	}
+
+	private ArrayList<Trigger> readIn() throws Exception {
 
 		String dataFile = "_bot_data.txt";
 		List<String> lines = new ArrayList<>();
 
-		//read file into stream, try-with-resources
-		try (Stream<String> stream = Files.lines(Paths.get(dataFile))) {
-			lines = stream
-					.filter(line -> line != null && !line.isEmpty())
-					.collect(Collectors.toList());
-		} catch (IOException e) {
-			e.printStackTrace();
+		BufferedReader br = new BufferedReader(new FileReader(this.getDataFile(dataFile)));
+
+		String line;
+
+		while ((line = br.readLine()) != null) {
+			if (!line.isEmpty()) {
+				lines.add(line);
+			}
 		}
 
 		ArrayList<Trigger> triggers = new ArrayList<>();
 
-		for (String line : lines) {
-			String[] parts = line.split(":");
+		for (String trig : lines) {
+			String[] parts = trig.split(":");
 			int trigger = Integer.parseInt(parts[0], 10);
 			Trigger t = new Trigger(trigger);
 			System.out.println("Got trigger : " + t.getName());
 
-			String[] actions = parts[1].split(",");
-			for (String action : actions) {
-				if (action.length() > 0) {
-					Action a = new Action(Integer.parseInt(action, 10));
-					t.registerAction(a);
-					System.out.println("\t : " + a.getName());
+			if (trig.contains(",")) {
+				String[] actions = parts[1].split(",");
+				for (String action : actions) {
+					if (action.length() > 0) {
+						Action a = new Action(Integer.parseInt(action, 10));
+						t.registerAction(a);
+						System.out.println("\t : " + a.getName());
+					}
 				}
 			}
 

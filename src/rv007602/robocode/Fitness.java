@@ -8,10 +8,11 @@ import robocode.control.events.BattleAdaptor;
 import robocode.control.events.BattleCompletedEvent;
 import robocode.control.events.BattleErrorEvent;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-class Fitness {
+public class Fitness {
 
 	private static String[] enemies;
 	private static int roundsPerBattle;
@@ -20,6 +21,7 @@ class Fitness {
 	private static RobocodeEngine engine;
 	private static RobotSpecification[] selectedRobots;
 	private static BattleSpecification battleSpec;
+	private static String bots;
 
 	static void setEnemies(String[] enemies) {
 		Fitness.enemies = enemies;
@@ -31,16 +33,22 @@ class Fitness {
 
 	private static void prepare(Individual individual) throws Exception {
 		String genotype = individual.getGenotype();
-		FileWriter output = new FileWriter("_bot_data.txt");
+
+		File f = new File("out\\production\\Robocode\\rv007602\\robocode\\LearnBot.data\\_bot_data.txt");
+
+		f.getParentFile().mkdirs();
+
+		FileWriter output = new FileWriter(f);
 		output.write(genotype);
+		output.flush();
 		output.close();
 		Fitness.score.clear();
 	}
 
-	static void analyze(Population population) throws Exception {
+	static void analyze(Population population, int generation) throws Exception {
 		int i = 0;
 		for (Individual individual : population.getIndividuals()) {
-			System.out.println("Analyzing individual " + (++i));
+			System.out.println("Analyzing individual " + (++i) + " of " + generation);
 			System.out.println(individual.getBehaviour());
 			Fitness.analyze(individual);
 		}
@@ -55,10 +63,10 @@ class Fitness {
 	static void initialize() {
 
 		// Disable log messages from Robocode
-		RobocodeEngine.setLogMessagesEnabled(false);
+//		RobocodeEngine.setLogMessagesEnabled(false);
 
 		// Create the RobocodeEngine
-		Fitness.engine = new RobocodeEngine(new java.io.File("c:/robocode"));
+		Fitness.engine = new RobocodeEngine(new File("c:\\robocode"));
 
 		// Add our own battle listener to the RobocodeEngine
 		Fitness.engine.addBattleListener(new BattleAdaptor() {
@@ -88,7 +96,7 @@ class Fitness {
 			bots += "," + enemy;
 		}
 
-		Fitness.battleSpec = new BattleSpecification(Fitness.roundsPerBattle, new BattlefieldSpecification(800, 600), engine.getLocalRepository(bots));
+		Fitness.bots = bots;
 
 	}
 
@@ -97,7 +105,7 @@ class Fitness {
 	}
 
 	private static int getFitness() {
-		Fitness.engine.runBattle(Fitness.battleSpec, true);
+		Fitness.engine.runBattle(new BattleSpecification(Fitness.roundsPerBattle, new BattlefieldSpecification(800, 600), Fitness.engine.getLocalRepository(bots)), true);
 
 		return Fitness.score.get(0);
 	}

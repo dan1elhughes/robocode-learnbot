@@ -24,6 +24,9 @@ class Individual {
 		Trigger hit_wall = new Trigger(Trigger.HIT_WALL);
 		Trigger scanned_robot = new Trigger(Trigger.SCANNED_ROBOT);
 
+		idle.registerAction(new Action(Action.BEAR_LEFT));
+		scanned_robot.registerAction(new Action(Action.FIRE));
+
 		phenotype.add(idle);
 		phenotype.add(bullet_hit);
 		phenotype.add(bullet_missed);

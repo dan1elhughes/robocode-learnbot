@@ -52,14 +52,18 @@ class Trigger {
 	}
 
 	public static ArrayList<Action> where(int event, ArrayList<Trigger> triggers) {
+
+		ArrayList<Action> a = new ArrayList<>();
+
 		for (Trigger trigger : triggers) {
 			if (trigger.getEvent() == event) {
-				System.out.println("Triggered: " + trigger.getName());
+//				System.out.println("Triggered: " + trigger.getName());
+				a.addAll(trigger.getActions());
 				return trigger.getActions();
 			}
 		}
 
-		return new ArrayList<>();
+		return a;
 	}
 
 	public void registerAction(Action action) {
@@ -97,7 +101,7 @@ class Trigger {
 			int index = ThreadLocalRandom.current().nextInt(actions.size());
 			Action a = actions.remove(index);
 
-			System.out.println("Removed action: " + a.getName());
+//			System.out.println("Removed action: " + a.getName());
 
 			actions.trimToSize();
 		}

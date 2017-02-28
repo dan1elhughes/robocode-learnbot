@@ -1,6 +1,5 @@
 package rv007602.robocode;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Action {
