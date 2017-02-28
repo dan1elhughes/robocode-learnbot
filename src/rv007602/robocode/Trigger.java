@@ -1,63 +1,36 @@
 package rv007602.robocode;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 class Trigger {
 
-	public static final int IDLE = 0;
-	public static final int BULLET_HIT = 1;
-	public static final int BULLET_MISSED = 2;
-	public static final int HIT_BY_BULLET = 3;
-	public static final int HIT_ROBOT = 4;
-	public static final int HIT_WALL = 5;
-	public static final int SCANNED_ROBOT = 6;
+	public enum On {
+		IDLE,
+		BULLET_HIT,
+		BULLET_MISSED,
+		HIT_BY_BULLET,
+		HIT_ROBOT,
+		HIT_WALL,
+		SCANNED_ROBOT
+	}
 
-	private final int event;
+	private final On event;
 
 	private final ArrayList<Action> actions = new ArrayList<>();
 
 	private String name;
 
-	public Trigger() {
-		this(ThreadLocalRandom.current().nextInt(0, 7));
-	}
-
-	public Trigger(int event) {
+	public Trigger(On event) {
 		this.event = event;
-
-		switch (event) {
-			case 0:
-				this.name = "IDLE";
-				break;
-			case 1:
-				this.name = "BULLET_HIT";
-				break;
-			case 2:
-				this.name = "BULLET_MISSED";
-				break;
-			case 3:
-				this.name = "HIT_BY_BULLET";
-				break;
-			case 4:
-				this.name = "HIT_ROBOT";
-				break;
-			case 5:
-				this.name = "HIT_WALL";
-				break;
-			case 6:
-				this.name = "SCANNED_ROBOT";
-				break;
-		}
+		this.name = event.toString();
 	}
 
-	public static ArrayList<Action> where(int event, ArrayList<Trigger> triggers) {
+	public static ArrayList<Action> where(On event, ArrayList<Trigger> triggers) {
 
 		ArrayList<Action> a = new ArrayList<>();
 
 		for (Trigger trigger : triggers) {
 			if (trigger.getEvent() == event) {
-//				System.out.println("Triggered: " + trigger.getName());
 				a.addAll(trigger.getActions());
 				return trigger.getActions();
 			}
@@ -66,45 +39,26 @@ class Trigger {
 		return a;
 	}
 
-	public void registerAction(Action action) {
+	public boolean registerAction(Action action) {
 		for (Action a : actions) {
 			if (a.getAction() == action.getAction()) {
-				return;
+				return false;
 			}
 		}
 
 		this.actions.add(action);
+		return true;
 	}
 
 	public ArrayList<Action> getActions() {
 		return this.actions;
 	}
 
-	public void clearActions() {
-		this.actions.clear();
-	}
-
-	public int getEvent() {
+	public On getEvent() {
 		return event;
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public void removeRandomAction() {
-		ArrayList<Action> actions = this.getActions();
-
-		int size = actions.size();
-
-		if (size > 0) {
-			int index = ThreadLocalRandom.current().nextInt(actions.size());
-			Action a = actions.remove(index);
-
-//			System.out.println("Removed action: " + a.getName());
-
-			actions.trimToSize();
-		}
-
 	}
 }

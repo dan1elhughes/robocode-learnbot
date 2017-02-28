@@ -49,7 +49,6 @@ public class Fitness {
 		int i = 0;
 		for (Individual individual : population.getIndividuals()) {
 			System.out.println("Analyzing individual " + (++i) + " of " + generation);
-			System.out.println(individual.getBehaviour());
 			Fitness.analyze(individual);
 		}
 	}

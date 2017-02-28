@@ -1,90 +1,104 @@
 package rv007602.robocode;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Individual {
 	private int fitness;
 	private ArrayList<Trigger> phenotype = new ArrayList<>();
-
-	private Trigger getRandomTrigger() {
-		return this.phenotype.get(ThreadLocalRandom.current().nextInt(0, phenotype.size()));
-	}
+	private String genotype;
 
 	public Individual() {
 		ArrayList<Trigger> phenotype = new ArrayList<>();
 
-		Trigger idle = new Trigger(Trigger.IDLE);
-		Trigger bullet_hit = new Trigger(Trigger.BULLET_HIT);
-		Trigger bullet_missed = new Trigger(Trigger.BULLET_MISSED);
-		Trigger hit_by_bullet = new Trigger(Trigger.HIT_BY_BULLET);
-		Trigger hit_robot = new Trigger(Trigger.HIT_ROBOT);
-		Trigger hit_wall = new Trigger(Trigger.HIT_WALL);
-		Trigger scanned_robot = new Trigger(Trigger.SCANNED_ROBOT);
+		for (int i = 0; i < Trigger.On.values().length; i++) {
+			Trigger t = new Trigger(Trigger.On.values()[i]);
+			for (int j = 0; j < 3; j++) {
 
-		idle.registerAction(new Action(Action.BEAR_LEFT));
-		scanned_robot.registerAction(new Action(Action.FIRE));
+				boolean added;
+				do {
+					added = t.registerAction(new Action());
+				} while (!added);
 
-		phenotype.add(idle);
-		phenotype.add(bullet_hit);
-		phenotype.add(bullet_missed);
-		phenotype.add(hit_by_bullet);
-		phenotype.add(hit_robot);
-		phenotype.add(hit_wall);
-		phenotype.add(scanned_robot);
+			}
+			phenotype.add(t);
+		}
 
-		this.phenotype = phenotype;
+		this.setPhenotype(phenotype);
 	}
 
 	public static Individual[] crossover(Individual parent1, Individual parent2, float crossoverRate) {
-		ArrayList<Trigger> triggers1 = parent1.getPhenotype();
-		ArrayList<Trigger> triggers2 = parent2.getPhenotype();
+		String dna1 = parent1.getGenotype();
+		String dna2 = parent2.getGenotype();
 
-		ArrayList<Trigger> childTriggers1 = new ArrayList<>();
-		ArrayList<Trigger> childTriggers2 = new ArrayList<>();
+		for (int i = 0; i < dna1.length(); i++) {
+			boolean swap = ThreadLocalRandom.current().nextBoolean();
 
-		// Build a list of all triggers from both parents in random order.
-		ArrayList<Trigger> triggers = new ArrayList<>();
-		triggers.addAll(triggers1);
-		triggers.addAll(triggers2);
-		Collections.shuffle(triggers);
+			if (swap) {
+				char oldDna1 = dna1.charAt(i);
+				char oldDna2 = dna2.charAt(i);
 
-		// Add half of the triggers to each child.
-		int length = triggers.size();
-		float half = length * crossoverRate;
-		while (half-- > 0) {
-			childTriggers1.add(triggers.remove(0));
+				char[] cdna1 = dna1.toCharArray();
+				cdna1[i] = oldDna2;
+				dna1 = String.valueOf(cdna1);
+
+				char[] cdna2 = dna2.toCharArray();
+				cdna2[i] = oldDna1;
+				dna2 = String.valueOf(cdna2);
+			}
 		}
-		while (triggers.size() > 0) {
-			childTriggers2.add(triggers.remove(0));
-		}
-
-		childTriggers1.sort(Comparator.comparingInt(Trigger::getEvent));
-		childTriggers2.sort(Comparator.comparingInt(Trigger::getEvent));
 
 		Individual child1 = new Individual();
-		child1.setPhenotype(childTriggers1);
+		child1.setGenotype(dna1);
 
 		Individual child2 = new Individual();
-		child2.setPhenotype(childTriggers2);
+		child2.setGenotype(dna2);
 
 		return new Individual[]{parent1, parent2, child1, child2};
 	}
 
-	private ArrayList<Trigger> getPhenotype() {
-		return phenotype;
+	public static ArrayList<Trigger> parse(String genotype) {
+		ArrayList<Trigger> triggers = new ArrayList<>();
+
+		String[] codons = genotype.split(",");
+		int i = 0;
+		for (String gene : codons) {
+			char[] actions = gene.toCharArray();
+
+			Trigger t = new Trigger(Trigger.On.values()[i++]);
+
+			for (char action : actions) {
+				t.registerAction(new Action(Action.Do.values()[Character.getNumericValue(action)]));
+			}
+
+			triggers.add(t);
+		}
+
+		return triggers;
+
+	}
+
+	public ArrayList<Trigger> getPhenotype() {
+		return Individual.parse(this.genotype);
 	}
 
 	private void setPhenotype(ArrayList<Trigger> phenotype) {
-		this.phenotype = phenotype;
+		String genotype = "";
+
+		for (Trigger trigger : phenotype) {
+			for (Action action : trigger.getActions()) {
+				genotype += action.getAction().ordinal();
+			}
+			genotype += ",";
+		}
+
+		this.genotype = genotype;
 	}
 
 	public String getBehaviour() {
 		String behaviour = "";
 
-		for (Trigger trigger : this.phenotype) {
+		for (Trigger trigger : this.getPhenotype()) {
 			behaviour += trigger.getName() + "(";
 
 			for (Action action : trigger.getActions()) {
@@ -98,19 +112,7 @@ class Individual {
 	}
 
 	public String getGenotype() {
-		String genotype = "";
-
-		for (Trigger trigger : this.phenotype) {
-			genotype += trigger.getEvent() + ":";
-
-			for (Action action : trigger.getActions()) {
-				genotype += action.getAction() + ",";
-			}
-
-			genotype += "\n";
-		}
-
-		return genotype;
+		return this.genotype;
 	}
 
 	public int getFitness() {
@@ -123,15 +125,24 @@ class Individual {
 	}
 
 	public void mutate() {
-		Trigger x = this.getRandomTrigger();
+		String genotype = this.genotype;
 
-		int chance = ThreadLocalRandom.current().nextInt(100);
+		int index = ThreadLocalRandom.current().nextInt(genotype.length());
 
-		if (chance > 90) {
-			x.removeRandomAction();
-		} else {
-			x.registerAction(new Action());
+		while (genotype.toCharArray()[index] == ',') {
+			index = ThreadLocalRandom.current().nextInt(genotype.length());
 		}
+
+		Action.Do newAction = Action.Do.values()[ThreadLocalRandom.current().nextInt(Action.Do.values().length)];
+
+		StringBuilder s = new StringBuilder(genotype);
+
+		s.setCharAt(index, Character.forDigit(newAction.ordinal(), 10));
+
+		this.setGenotype(s.toString());
 	}
 
+	public void setGenotype(String genotype) {
+		this.genotype = genotype;
+	}
 }

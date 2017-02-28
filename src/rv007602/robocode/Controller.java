@@ -6,10 +6,10 @@ public class Controller {
 
 	public static void main(String[] args) throws Exception {
 
-		int generations = 40;
+		int generations = 30;
 		int survivors = 6;
 		int populationSize = 10;
-		float mutationRate = 0.2f;
+		float mutationRate = 0.1f;
 		float crossoverRate = 0.5f;
 
 		String[] enemies = {"sample.SittingDuck"};

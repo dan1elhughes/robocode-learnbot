@@ -18,34 +18,34 @@ class Behaviour {
 				System.out.println("Applying behaviour: " + action.getName());
 
 				switch (action.getAction()) {
-					case Action.SIT:
+					case SIT:
 						Behaviour.sit(bot);
 						break;
-					case Action.FIRE:
+					case FIRE:
 						Behaviour.fire(bot);
 						break;
-					case Action.SNIPE:
+					case SNIPE:
 						Behaviour.snipe(bot);
 						break;
-					case Action.BEAR_LEFT:
+					case BEAR_LEFT:
 						Behaviour.bearLeft(bot);
 						break;
-					case Action.BEAR_RIGHT:
+					case BEAR_RIGHT:
 						Behaviour.bearRight(bot);
 						break;
-					case Action.TURN_LEFT:
+					case TURN_LEFT:
 						Behaviour.turnLeft(bot);
 						break;
-					case Action.TURN_RIGHT:
+					case TURN_RIGHT:
 						Behaviour.turnRight(bot);
 						break;
-					case Action.AHEAD:
+					case AHEAD:
 						Behaviour.ahead(bot);
 						break;
-					case Action.BACK:
+					case BACK:
 						Behaviour.back(bot);
 						break;
-					case Action.SPIN:
+					case SPIN:
 						Behaviour.spin(bot);
 						break;
 					default:
