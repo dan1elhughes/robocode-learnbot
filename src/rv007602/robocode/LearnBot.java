@@ -55,30 +55,37 @@ public class LearnBot extends AdvancedRobot {
 	}
 
 	private void idle() {
-		Behaviour.apply(this, Trigger.where(Trigger.On.IDLE, this.triggers));
+		Behaviour.enqueue(this, Trigger.where(Trigger.On.IDLE, this.triggers));
+		this.execute();
 	}
 
 	public void onBulletHit(BulletHitEvent event) {
-		Behaviour.apply(this, Trigger.where(Trigger.On.BULLET_HIT, this.triggers));
+		Behaviour.enqueue(this, Trigger.where(Trigger.On.BULLET_HIT, this.triggers));
+		this.execute();
 	}
 
 	public void onBulletMissed(BulletMissedEvent event) {
-		Behaviour.apply(this, Trigger.where(Trigger.On.BULLET_MISSED, this.triggers));
+		Behaviour.enqueue(this, Trigger.where(Trigger.On.BULLET_MISSED, this.triggers));
+		this.execute();
 	}
 
 	public void onHitByBullet(HitByBulletEvent event) {
-		Behaviour.apply(this, Trigger.where(Trigger.On.HIT_BY_BULLET, this.triggers));
+		Behaviour.enqueue(this, Trigger.where(Trigger.On.HIT_BY_BULLET, this.triggers));
+		this.execute();
 	}
 
 	public void onHitRobot(HitRobotEvent event) {
-		Behaviour.apply(this, Trigger.where(Trigger.On.HIT_ROBOT, this.triggers));
+		Behaviour.enqueue(this, Trigger.where(Trigger.On.HIT_ROBOT, this.triggers));
+		this.execute();
 	}
 
 	public void onHitWall(HitWallEvent event) {
-		Behaviour.apply(this, Trigger.where(Trigger.On.HIT_WALL, this.triggers));
+		Behaviour.enqueue(this, Trigger.where(Trigger.On.HIT_WALL, this.triggers));
+		this.execute();
 	}
 
 	public void onScannedRobot(ScannedRobotEvent event) {
-		Behaviour.apply(this, Trigger.where(Trigger.On.SCANNED_ROBOT, this.triggers));
+		Behaviour.enqueue(this, Trigger.where(Trigger.On.SCANNED_ROBOT, this.triggers));
+		this.execute();
 	}
 }

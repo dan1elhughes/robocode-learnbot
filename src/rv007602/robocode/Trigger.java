@@ -39,15 +39,8 @@ class Trigger {
 		return a;
 	}
 
-	public boolean registerAction(Action action) {
-		for (Action a : actions) {
-			if (a.getAction() == action.getAction()) {
-				return false;
-			}
-		}
-
+	public void registerAction(Action action) {
 		this.actions.add(action);
-		return true;
 	}
 
 	public ArrayList<Action> getActions() {

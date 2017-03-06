@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 class Behaviour {
 
-	static void apply(LearnBot bot, ArrayList<Action> actions) {
+	static void enqueue(LearnBot bot, ArrayList<Action> actions) {
 		for (Action action : actions) {
-			Behaviour.apply(bot, action);
+			Behaviour.enqueue(bot, action);
 		}
 	}
 
-	private static void apply(LearnBot bot, Action action) {
+	private static void enqueue(LearnBot bot, Action action) {
 		if (!bot.finished) {
 			try {
 
@@ -59,52 +59,51 @@ class Behaviour {
 	}
 
 	private static void sit(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("doNothing");
-		method.invoke(bot);
+		// Do nothing
 	}
 
 	private static void fire(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("fire", double.class);
+		Method method = bot.getClass().getMethod("setFire", double.class);
 		method.invoke(bot, 1d);
 	}
 
 	private static void snipe(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("fire", double.class);
+		Method method = bot.getClass().getMethod("setFire", double.class);
 		method.invoke(bot, 3d);
 	}
 
 	private static void bearLeft(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("turnLeft", double.class);
+		Method method = bot.getClass().getMethod("setTurnLeft", double.class);
 		method.invoke(bot, 20d);
 	}
 
 	private static void bearRight(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("turnRight", double.class);
+		Method method = bot.getClass().getMethod("setTurnRight", double.class);
 		method.invoke(bot, 20d);
 	}
 
 	private static void turnLeft(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("turnLeft", double.class);
+		Method method = bot.getClass().getMethod("setTurnLeft", double.class);
 		method.invoke(bot, 80d);
 	}
 
 	private static void turnRight(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("turnRight", double.class);
+		Method method = bot.getClass().getMethod("setTurnRight", double.class);
 		method.invoke(bot, 80d);
 	}
 
 	private static void ahead(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("ahead", double.class);
+		Method method = bot.getClass().getMethod("setAhead", double.class);
 		method.invoke(bot, 100d);
 	}
 
 	private static void back(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("back", double.class);
+		Method method = bot.getClass().getMethod("setBack", double.class);
 		method.invoke(bot, 100d);
 	}
 
 	private static void spin(LearnBot bot) throws Exception {
-		Method method = bot.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass().getDeclaredMethod("turnLeft", double.class);
+		Method method = bot.getClass().getMethod("setTurnLeft", double.class);
 		method.invoke(bot, 180d);
 	}
 }

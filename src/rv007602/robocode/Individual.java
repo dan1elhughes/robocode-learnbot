@@ -14,12 +14,7 @@ class Individual {
 		for (int i = 0; i < Trigger.On.values().length; i++) {
 			Trigger t = new Trigger(Trigger.On.values()[i]);
 			for (int j = 0; j < 3; j++) {
-
-				boolean added;
-				do {
-					added = t.registerAction(new Action());
-				} while (!added);
-
+				t.registerAction(new Action());
 			}
 			phenotype.add(t);
 		}

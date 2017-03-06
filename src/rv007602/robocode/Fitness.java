@@ -45,10 +45,11 @@ public class Fitness {
 		Fitness.score.clear();
 	}
 
-	static void analyze(Population population, int generation) throws Exception {
+	static void analyze(Population population, int generation, int generations) throws Exception {
 		int i = 0;
 		for (Individual individual : population.getIndividuals()) {
-			System.out.println("Analyzing individual " + (++i) + " of " + generation);
+			System.out.println((++i) + ", " + generation + " of " + generations);
+			System.out.println(individual.getGenotype());
 			Fitness.analyze(individual);
 		}
 	}

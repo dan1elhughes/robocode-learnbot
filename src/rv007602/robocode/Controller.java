@@ -7,12 +7,12 @@ public class Controller {
 	public static void main(String[] args) throws Exception {
 
 		int generations = 30;
-		int survivors = 6;
-		int populationSize = 10;
-		float mutationRate = 0.1f;
+		int survivors = 8;
+		int populationSize = 14;
+		float mutationRate = 0.2f;
 		float crossoverRate = 0.5f;
 
-		String[] enemies = {"sample.SittingDuck"};
+		String[] enemies = {"sample.SpinBot", "sample.SpinBot"};
 
 		Fitness.setEnemies(enemies);
 
@@ -23,7 +23,7 @@ public class Controller {
 		Fitness.initialize();
 
 		Population population = new Population(populationSize);
-		Fitness.analyze(population, 0);
+		Fitness.analyze(population, 0, -1);
 
 		FileWriter output = new FileWriter("out.csv");
 
@@ -37,7 +37,7 @@ public class Controller {
 
 		output.write(headings + "\n");
 
-		output.write(String.format("%d%s,%d\n", 0, population, population.getFittest().getFitness()));
+		output.write(String.format("%d%s\n", 0, population));
 
 		int i = 0;
 		while (i++ < generations) {
@@ -52,9 +52,9 @@ public class Controller {
 
 			population.cullTo(populationSize);
 
-			Fitness.analyze(population, i);
+			Fitness.analyze(population, i, generations);
 
-			output.write(String.format("%d%s,%d\n", i, population, population.getFittest().getFitness()));
+			output.write(String.format("%d%s\n", i, population));
 		}
 
 		Fitness.cleanUp();
