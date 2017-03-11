@@ -22,7 +22,7 @@ class Population {
 		for (Individual individual : individuals) {
 			str += "," + individual.getFitness();
 		}
-		return str;
+		return str.substring(1);
 	}
 
 	private void sort() {
@@ -73,16 +73,19 @@ class Population {
 	}
 
 	private ArrayList<Individual[]> getPairs() {
-		this.sort();
 
+		ArrayList<Integer> indexes = new ArrayList<>();
+		for (int i = 0; i < this.individuals.size(); i++) {
+			indexes.add(i);
+		}
+		Collections.shuffle(indexes);
+
+		Individual parent;
 		ArrayList<Individual[]> pairs = new ArrayList<>();
 		ArrayList<Individual> pair = new ArrayList<>();
 
-		Individual parent;
-
-		while (this.individuals.size() > 0) {
-			int index = (int) ((Math.random() * this.individuals.size()));
-			parent = individuals.remove(index);
+		while (indexes.size() > 0) {
+			parent = this.individuals.get(indexes.remove(0));
 			pair.add(parent);
 
 			if (pair.size() == 2) {
@@ -121,5 +124,26 @@ class Population {
 		while (this.individuals.size() > populationSize) {
 			this.individuals.remove(this.individuals.size() - 1);
 		}
+	}
+
+	public String getBehaviour() {
+		String x = "";
+
+		for (Individual i : this.individuals) {
+			x += i.getGenotype().replace(',', '|') + ",";
+		}
+
+		return x;
+	}
+
+	public String getSummary() {
+		this.sort();
+
+		int totalFitness = 0;
+		for (Individual individual : individuals) {
+			totalFitness += individual.getFitness();
+		}
+
+		return this.getFittest().getFitness() + "," + totalFitness / this.individuals.size();
 	}
 }

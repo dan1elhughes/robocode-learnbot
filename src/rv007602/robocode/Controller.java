@@ -1,7 +1,5 @@
 package rv007602.robocode;
 
-import java.io.FileWriter;
-
 public class Controller {
 
 	public static void main(String[] args) throws Exception {
@@ -25,42 +23,41 @@ public class Controller {
 		Population population = new Population(populationSize);
 		Fitness.analyze(population, 0, -1);
 
-		FileWriter output = new FileWriter("out.csv");
+		Output summary = new Output("summary.csv");
+		Output bulk = new Output("bulk.csv");
 
-		String headings = "Generation";
+		summary.setMode(Output.SUMMARY);
+		bulk.setMode(Output.BULK);
 
-		for (int i = 0; i < populationSize; i++) {
-			headings += ",FitnessOf" + (i + 1);
-		}
+		summary.addHeadings(populationSize);
+		bulk.addHeadings(populationSize);
 
-		headings += ",Fittest";
-
-		output.write(headings + "\n");
-
-		output.write(String.format("%d%s\n", 0, population));
+		summary.addRow(population);
+		bulk.addRow(population);
 
 		int i = 0;
 		while (i++ < generations) {
 			System.out.println("== Generation " + i);
-			Population nextGeneration = population.select(survivors);
-
-			Population children = nextGeneration.crossover(crossoverRate);
+			Population parents = population.select(survivors);
+			Population children = parents.crossover(crossoverRate);
 			children.mutate(mutationRate);
 
-			population = nextGeneration;
+			population = parents;
 			population.add(children);
 
 			population.cullTo(populationSize);
 
 			Fitness.analyze(population, i, generations);
 
-			output.write(String.format("%d%s\n", i, population));
+			summary.addRow(population);
+			bulk.addRow(population);
+
 		}
 
 		Fitness.cleanUp();
 
-		output.flush();
-		output.close();
+		summary.finish();
+		bulk.finish();
 
 		System.exit(0);
 	}

@@ -49,7 +49,7 @@ class Individual {
 		Individual child2 = new Individual();
 		child2.setGenotype(dna2);
 
-		return new Individual[]{parent1, parent2, child1, child2};
+		return new Individual[]{child1, child2};
 	}
 
 	public static ArrayList<Trigger> parse(String genotype) {
@@ -88,22 +88,6 @@ class Individual {
 		}
 
 		this.genotype = genotype;
-	}
-
-	public String getBehaviour() {
-		String behaviour = "";
-
-		for (Trigger trigger : this.getPhenotype()) {
-			behaviour += trigger.getName() + "(";
-
-			for (Action action : trigger.getActions()) {
-				behaviour += action.getName() + ",";
-			}
-
-			behaviour += "), ";
-		}
-
-		return behaviour;
 	}
 
 	public String getGenotype() {

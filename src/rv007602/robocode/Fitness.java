@@ -48,8 +48,19 @@ public class Fitness {
 	static void analyze(Population population, int generation, int generations) throws Exception {
 		int i = 0;
 		for (Individual individual : population.getIndividuals()) {
-			System.out.println((++i) + ", " + generation + " of " + generations);
-			System.out.println(individual.getGenotype());
+			System.out.println(
+					"I " +
+					(++i) +
+					"/" +
+					(population.getIndividuals().size()) +
+					", G " +
+					generation +
+					"/" +
+					generations +
+					" (" +
+					individual.getGenotype() +
+					")"
+			);
 			Fitness.analyze(individual);
 		}
 	}
