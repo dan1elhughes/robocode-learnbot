@@ -2,6 +2,7 @@ package rv007602.robocode;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 class Population {
 	private final ArrayList<Individual> individuals;
@@ -118,12 +119,33 @@ class Population {
 		return this.individuals;
 	}
 
+	// Fitness proportionate selection
 	public void cullTo(int populationSize) {
 		this.sort();
 
-		while (this.individuals.size() > populationSize) {
-			this.individuals.remove(this.individuals.size() - 1);
+		ArrayList<Integer> indexes = new ArrayList<>();
+
+		int index = 0;
+
+		for (Individual individual : this.individuals) {
+			int fitness = individual.getFitness();
+			while (fitness --> 0) {
+				indexes.add(index);
+			}
+
+			index++;
 		}
+
+		ArrayList<Individual> selected = new ArrayList<>();
+
+		while (selected.size() < populationSize) {
+			int nextIndex = ThreadLocalRandom.current().nextInt(indexes.size());
+
+			selected.add(this.individuals.get(indexes.get(nextIndex)));
+		}
+
+		this.individuals.clear();
+		this.individuals.addAll(selected);
 	}
 
 	public String getBehaviour() {
