@@ -59,9 +59,8 @@ class Population {
 
 		Population selected = new Population(0);
 
-		while (survivors-- > 0) {
-			Individual survived = this.individuals.remove(0);
-			selected.add(survived);
+		for (int i = 0; i < survivors; i++) {
+			selected.add(this.individuals.get(i));
 		}
 
 		return selected;
