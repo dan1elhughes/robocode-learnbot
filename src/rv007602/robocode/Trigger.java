@@ -21,15 +21,12 @@ class Trigger {
 
 	private final ArrayList<Action> actions = new ArrayList<>();
 
-	private String name;
-
 	/**
 	 * Creates a new trigger for the given event.
 	 * @param event The event.
 	 */
 	public Trigger(On event) {
 		this.event = event;
-		this.name = event.toString();
 	}
 
 	/**
@@ -54,7 +51,7 @@ class Trigger {
 
 	/**
 	 * Binds an action onto this trigger.
-	 * @param action
+	 * @param action The action to bind
 	 */
 	public void registerAction(Action action) {
 		this.actions.add(action);
@@ -64,11 +61,7 @@ class Trigger {
 		return this.actions;
 	}
 
-	public On getEvent() {
+	private On getEvent() {
 		return event;
-	}
-
-	public String getName() {
-		return name;
 	}
 }

@@ -3,7 +3,6 @@ package rv007602.robocode;
 import robocode.control.BattleSpecification;
 import robocode.control.BattlefieldSpecification;
 import robocode.control.RobocodeEngine;
-import robocode.control.RobotSpecification;
 import robocode.control.events.BattleAdaptor;
 import robocode.control.events.BattleCompletedEvent;
 import robocode.control.events.BattleErrorEvent;
@@ -12,15 +11,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-public class Fitness {
+class Fitness {
 
 	private static String[] enemies;
 	private static int roundsPerBattle;
 	private static boolean visible = false;
 	private static final ArrayList<Integer> score = new ArrayList<>();
 	private static RobocodeEngine engine;
-	private static RobotSpecification[] selectedRobots;
-	private static BattleSpecification battleSpec;
 	private static String bots;
 
 	static void setEnemies(String[] enemies) {
@@ -33,6 +30,7 @@ public class Fitness {
 
 	/**
 	 * Prepares the analyzer by writing out a file containing the genotype of a bot.
+	 *
 	 * @param individual The bot which is being tested.
 	 * @throws Exception Error writing file.
 	 */
@@ -52,8 +50,9 @@ public class Fitness {
 
 	/**
 	 * Writes fitness values into every member of a population.
-	 * @param population All of the bots to be analyzed.
-	 * @param generation Which generation we are currently analyzing.
+	 *
+	 * @param population  All of the bots to be analyzed.
+	 * @param generation  Which generation we are currently analyzing.
 	 * @param generations Total number of generations to analyze.
 	 * @throws Exception Unable to write files to prepare the bot.
 	 */
@@ -62,16 +61,16 @@ public class Fitness {
 		for (Individual individual : population.getIndividuals()) {
 			System.out.println(
 					"I " +
-					(++i) +
-					"/" +
-					(population.getIndividuals().size()) +
-					", G " +
-					generation +
-					"/" +
-					generations +
-					" (" +
-					individual.getGenotype() +
-					")"
+							(++i) +
+							"/" +
+							(population.getIndividuals().size()) +
+							", G " +
+							generation +
+							"/" +
+							generations +
+							" (" +
+							individual.getGenotype() +
+							")"
 			);
 			Fitness.analyze(individual);
 		}
@@ -79,6 +78,7 @@ public class Fitness {
 
 	/**
 	 * Writes a fitness value into the given individual.
+	 *
 	 * @param individual The bot to be tested.
 	 * @throws Exception Unable to write files to prepare the bot.
 	 */
@@ -141,6 +141,7 @@ public class Fitness {
 
 	/**
 	 * Finds the fitness value of the currently prepared bot.
+	 *
 	 * @return The fitness of the bot.
 	 */
 	private static int getFitness() {
@@ -151,6 +152,7 @@ public class Fitness {
 
 	/**
 	 * Toggles visibility of the battlefield.
+	 *
 	 * @param visible Whether to show the battlefield.
 	 */
 	static void setVisible(boolean visible) {

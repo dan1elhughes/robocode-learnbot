@@ -43,7 +43,7 @@ class Population {
 	 *
 	 * @return The fittest population member.
 	 */
-	public Individual getFittest() {
+	private Individual getFittest() {
 		this.sort();
 		return this.individuals.get(0);
 	}
@@ -93,6 +93,7 @@ class Population {
 
 	/**
 	 * Performs crossover on pairs of individuals
+	 *
 	 * @param crossoverRate The crossover rate passed to Individual.crossover
 	 * @return All offspring for the current population
 	 */
@@ -119,6 +120,7 @@ class Population {
 
 	/**
 	 * Pairs up all individuals by fitness. First pair is the two fittest individuals.
+	 *
 	 * @return Pairs of individuals
 	 */
 	private ArrayList<Individual[]> getPairs() {
@@ -151,6 +153,7 @@ class Population {
 
 	/**
 	 * Triggers mutation on a certain percentage of the population.
+	 *
 	 * @param mutationRate Proportion of the population to mutate (0 to 1).
 	 */
 	public Population mutate(float mutationRate) {
@@ -165,6 +168,7 @@ class Population {
 
 	/**
 	 * Adds all members of another population to this one.
+	 *
 	 * @param population The population to add.
 	 */
 	public void add(Population population) {

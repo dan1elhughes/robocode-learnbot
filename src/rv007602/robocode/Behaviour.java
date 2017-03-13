@@ -28,9 +28,6 @@ class Behaviour {
 				System.out.println("Applying behaviour: " + action.getName());
 
 				switch (action.getAction()) {
-					case SIT:
-						Behaviour.sit(bot);
-						break;
 					case FIRE:
 						Behaviour.fire(bot);
 						break;
@@ -58,18 +55,16 @@ class Behaviour {
 					case SPIN:
 						Behaviour.spin(bot);
 						break;
+					case SIT:
+						// Falls through
 					default:
-						Behaviour.sit(bot);
+						// Do nothing
 						break;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private static void sit(LearnBot bot) throws Exception {
-		// Do nothing
 	}
 
 	private static void fire(LearnBot bot) throws Exception {

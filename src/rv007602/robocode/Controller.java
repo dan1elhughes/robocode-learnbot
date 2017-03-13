@@ -1,6 +1,6 @@
 package rv007602.robocode;
 
-public class Controller {
+class Controller {
 
 	public static void main(String[] args) throws Exception {
 

@@ -16,7 +16,7 @@ class Action {
 
 	/**
 	 * Create the action handler with the given action.
-	 * @param action
+	 * @param action The action to create
 	 */
 	public Action(Do action) {
 		this.action = action;

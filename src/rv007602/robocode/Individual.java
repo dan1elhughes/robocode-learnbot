@@ -5,7 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 class Individual {
 	private int fitness;
-	private ArrayList<Trigger> phenotype = new ArrayList<>();
 	private String genotype;
 
 	/**
@@ -37,7 +36,7 @@ class Individual {
 		String dna2 = parent2.getGenotype();
 
 		for (int i = 0; i < dna1.length(); i++) {
-			boolean swap = ThreadLocalRandom.current().nextBoolean();
+			boolean swap = ThreadLocalRandom.current().nextFloat() >= crossoverRate;
 
 			if (swap) {
 				char oldDna1 = dna1.charAt(i);
@@ -86,10 +85,6 @@ class Individual {
 
 		return triggers;
 
-	}
-
-	public ArrayList<Trigger> getPhenotype() {
-		return Individual.parse(this.genotype);
 	}
 
 	/**
@@ -144,7 +139,7 @@ class Individual {
 		this.setGenotype(s.toString());
 	}
 
-	public void setGenotype(String genotype) {
+	private void setGenotype(String genotype) {
 		this.genotype = genotype;
 	}
 }

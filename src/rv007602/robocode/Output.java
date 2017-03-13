@@ -4,7 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Output {
+class Output {
 
 	private BufferedWriter writer;
 
@@ -32,7 +32,7 @@ public class Output {
 		this.mode = mode;
 	}
 
-	public void write(String str) {
+	private void write(String str) {
 		try {
 			this.writer.write(str + "\n");
 		} catch (IOException e) {
