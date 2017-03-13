@@ -45,13 +45,14 @@ public class Controller {
 			population = parents;
 			population.add(children);
 
-			population.cullTo(populationSize);
-
 			Fitness.analyze(population, i, generations);
 
 			summary.addRow(population);
 			bulk.addRow(population);
 
+			population.cullTo(populationSize);
+
+			output.write(String.format("%d%s\n", i, population));
 		}
 
 		Fitness.cleanUp();
