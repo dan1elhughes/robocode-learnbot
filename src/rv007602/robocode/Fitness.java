@@ -31,6 +31,11 @@ public class Fitness {
 		Fitness.roundsPerBattle = roundsPerBattle;
 	}
 
+	/**
+	 * Prepares the analyzer by writing out a file containing the genotype of a bot.
+	 * @param individual The bot which is being tested.
+	 * @throws Exception Error writing file.
+	 */
 	private static void prepare(Individual individual) throws Exception {
 		String genotype = individual.getGenotype();
 
@@ -45,6 +50,13 @@ public class Fitness {
 		Fitness.score.clear();
 	}
 
+	/**
+	 * Writes fitness values into every member of a population.
+	 * @param population All of the bots to be analyzed.
+	 * @param generation Which generation we are currently analyzing.
+	 * @param generations Total number of generations to analyze.
+	 * @throws Exception Unable to write files to prepare the bot.
+	 */
 	static void analyze(Population population, int generation, int generations) throws Exception {
 		int i = 0;
 		for (Individual individual : population.getIndividuals()) {
@@ -65,12 +77,21 @@ public class Fitness {
 		}
 	}
 
+	/**
+	 * Writes a fitness value into the given individual.
+	 * @param individual The bot to be tested.
+	 * @throws Exception Unable to write files to prepare the bot.
+	 */
 	private static void analyze(Individual individual) throws Exception {
 		Fitness.prepare(individual);
 		int score = Fitness.getFitness();
 		individual.setFitness(score);
 	}
 
+	/**
+	 * Prepares the analysis "engine" by attaching handlers and creating the RobocodeEngine.
+	 * Applies the configuration values set previously.
+	 */
 	static void initialize() {
 
 		// Disable log messages from Robocode
@@ -111,16 +132,27 @@ public class Fitness {
 
 	}
 
+	/**
+	 * Force closes the RobocodeEngine when analysis is finished.
+	 */
 	static void cleanUp() {
 		Fitness.engine.close();
 	}
 
+	/**
+	 * Finds the fitness value of the currently prepared bot.
+	 * @return The fitness of the bot.
+	 */
 	private static int getFitness() {
 		Fitness.engine.runBattle(new BattleSpecification(Fitness.roundsPerBattle, new BattlefieldSpecification(800, 600), Fitness.engine.getLocalRepository(bots)), true);
 
 		return Fitness.score.get(0);
 	}
 
+	/**
+	 * Toggles visibility of the battlefield.
+	 * @param visible Whether to show the battlefield.
+	 */
 	static void setVisible(boolean visible) {
 		Fitness.visible = visible;
 	}

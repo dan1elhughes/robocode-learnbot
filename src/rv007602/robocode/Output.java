@@ -12,6 +12,10 @@ public class Output {
 	public static final int BULK = 1;
 	private int mode;
 
+	/**
+	 * Create a new output object pointing at the given filename.
+	 * @param filename Where to write.
+	 */
 	public Output(String filename) {
 		try {
 			this.writer = new BufferedWriter(new FileWriter(filename));
@@ -20,6 +24,10 @@ public class Output {
 		}
 	}
 
+	/**
+	 * Sets the mode of this outputter.
+	 * @param mode Either Output.SUMMARY or Output.BULK.
+	 */
 	public void setMode(int mode) {
 		this.mode = mode;
 	}
@@ -32,6 +40,10 @@ public class Output {
 		}
 	}
 
+	/**
+	 * Creates CSV headings in the file.
+	 * @param populationSize The size of the population being operated on.
+	 */
 	public void addHeadings(int populationSize) {
 		switch (this.mode) {
 			case Output.SUMMARY:
@@ -50,6 +62,10 @@ public class Output {
 		}
 	}
 
+	/**
+	 * Adds an output row with the data from the given population.
+	 * @param population The population being operated on.
+	 */
 	public void addRow(Population population) {
 		switch (this.mode) {
 			case Output.SUMMARY:
@@ -61,6 +77,9 @@ public class Output {
 		}
 	}
 
+	/**
+	 * Safely close the output object.
+	 */
 	public void finish() {
 		try {
 			this.writer.flush();

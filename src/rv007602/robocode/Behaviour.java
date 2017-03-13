@@ -5,12 +5,22 @@ import java.util.ArrayList;
 
 class Behaviour {
 
+	/**
+	 * Queues up a list of actions to be taken by the bot.
+	 * @param bot The bot on which the actions will be applied.
+	 * @param actions The list of actions to take.
+	 */
 	static void enqueue(LearnBot bot, ArrayList<Action> actions) {
 		for (Action action : actions) {
 			Behaviour.enqueue(bot, action);
 		}
 	}
 
+	/**
+	 * Queues up an action to be taken by the bot.
+	 * @param bot The bot on which the action will be applied.
+	 * @param action The action to take.
+	 */
 	private static void enqueue(LearnBot bot, Action action) {
 		if (!bot.finished) {
 			try {

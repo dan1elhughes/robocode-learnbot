@@ -7,6 +7,11 @@ import java.util.concurrent.ThreadLocalRandom;
 class Population {
 	private final ArrayList<Individual> individuals;
 
+	/**
+	 * Creates a new random population of the given size.
+	 *
+	 * @param populationSize How many members in the population.
+	 */
 	public Population(int populationSize) {
 		this.individuals = new ArrayList<>();
 
@@ -26,15 +31,29 @@ class Population {
 		return str.substring(1);
 	}
 
+	/**
+	 * Reorders the population by fitness.
+	 */
 	private void sort() {
 		(this.individuals).sort((Individual o1, Individual o2) -> o2.getFitness() - o1.getFitness());
 	}
 
+	/**
+	 * Finds the fittest individual in the population.
+	 *
+	 * @return The fittest population member.
+	 */
 	public Individual getFittest() {
 		this.sort();
 		return this.individuals.get(0);
 	}
 
+	/**
+	 * Returns a new population containing only the fittest individuals.
+	 *
+	 * @param survivors The number of individuals to return
+	 * @return
+	 */
 	public Population select(int survivors) {
 		this.sort();
 
@@ -52,6 +71,11 @@ class Population {
 		this.individuals.add(individual);
 	}
 
+	/**
+	 * Performs crossover on pairs of individuals
+	 * @param crossoverRate The crossover rate passed to Individual.crossover
+	 * @return All offspring for the current population
+	 */
 	public Population crossover(float crossoverRate) {
 		ArrayList<Individual[]> pairs = this.getPairs();
 		ArrayList<Individual> children = new ArrayList<>();
@@ -73,6 +97,10 @@ class Population {
 		return pop;
 	}
 
+	/**
+	 * Pairs up all individuals by fitness. First pair is the two fittest individuals.
+	 * @return Pairs of individuals
+	 */
 	private ArrayList<Individual[]> getPairs() {
 
 		ArrayList<Integer> indexes = new ArrayList<>();
@@ -101,6 +129,10 @@ class Population {
 		return pairs;
 	}
 
+	/**
+	 * Triggers mutation on a certain percentage of the population.
+	 * @param mutationRate Proportion of the population to mutate (0 to 1).
+	 */
 	public void mutate(float mutationRate) {
 		for (Individual individual : this.individuals) {
 			if (Math.random() <= mutationRate) {
@@ -109,6 +141,10 @@ class Population {
 		}
 	}
 
+	/**
+	 * Adds all members of another population to this one.
+	 * @param population The population to add.
+	 */
 	public void add(Population population) {
 		for (Individual individual : population.getIndividuals()) {
 			this.add(individual);
@@ -119,7 +155,10 @@ class Population {
 		return this.individuals;
 	}
 
-	// Fitness proportionate selection
+	/**
+	 * Executes fitness proportionate selection to reduce the size of the population.
+	 * @param populationSize The final size of the population.
+	 */
 	public void cullTo(int populationSize) {
 		this.sort();
 
@@ -129,7 +168,7 @@ class Population {
 
 		for (Individual individual : this.individuals) {
 			int fitness = individual.getFitness();
-			while (fitness --> 0) {
+			while (fitness-- > 0) {
 				indexes.add(index);
 			}
 

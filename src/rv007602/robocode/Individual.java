@@ -8,6 +8,9 @@ class Individual {
 	private ArrayList<Trigger> phenotype = new ArrayList<>();
 	private String genotype;
 
+	/**
+	 * Create a new individual with a randomly generated trigger/action list.
+	 */
 	public Individual() {
 		ArrayList<Trigger> phenotype = new ArrayList<>();
 
@@ -22,6 +25,13 @@ class Individual {
 		this.setPhenotype(phenotype);
 	}
 
+	/**
+	 * Combines to individuals to form a pair of offspring, using uniform crossover.
+	 * @param parent1 The first parent.
+	 * @param parent2 The second parent.
+	 * @param crossoverRate How much DNA to take from each parent. 50% gives precise 50/50 uniform crossover.
+	 * @return A pair of offspring.
+	 */
 	public static Individual[] crossover(Individual parent1, Individual parent2, float crossoverRate) {
 		String dna1 = parent1.getGenotype();
 		String dna2 = parent2.getGenotype();
@@ -52,6 +62,11 @@ class Individual {
 		return new Individual[]{child1, child2};
 	}
 
+	/**
+	 * Converts a genotype string into a phenotype representation.
+	 * @param genotype A string of the format "XXX,XXX,XXX,XXX" where X is an action integer.
+	 * @return A list of triggers with bound actions.
+	 */
 	public static ArrayList<Trigger> parse(String genotype) {
 		ArrayList<Trigger> triggers = new ArrayList<>();
 
@@ -77,6 +92,10 @@ class Individual {
 		return Individual.parse(this.genotype);
 	}
 
+	/**
+	 * Stores the given phenotype into the individual.
+	 * @param phenotype The phenotype to store.
+	 */
 	private void setPhenotype(ArrayList<Trigger> phenotype) {
 		String genotype = "";
 
@@ -103,6 +122,10 @@ class Individual {
 		this.fitness = fitness;
 	}
 
+	/**
+	 * Performs bit-string mutation of the genotype string.
+	 * Swaps a random index in the genotype for a new random action.
+	 */
 	public void mutate() {
 		String genotype = this.genotype;
 

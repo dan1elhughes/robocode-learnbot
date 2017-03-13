@@ -12,6 +12,9 @@ public class LearnBot extends AdvancedRobot {
 	private ArrayList<Trigger> triggers;
 	public boolean finished = false;
 
+	/**
+	 * Reads in a genotype and executes the main action loop of the bot.
+	 */
 	public void run() {
 
 		int i = 0;
