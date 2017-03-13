@@ -49,21 +49,42 @@ class Population {
 	}
 
 	/**
-	 * Returns a new population containing only the fittest individuals.
+	 * Run roulette selection to build a new population containing fit individuals.
 	 *
 	 * @param survivors The number of individuals to return
-	 * @return
+	 * @return A subset of the population
 	 */
 	public Population select(int survivors) {
 		this.sort();
 
 		Population selected = new Population(0);
 
-		for (int i = 0; i < survivors; i++) {
-			selected.add(this.individuals.get(i));
+		// Build a list of indexes, where each index is in the
+		// list multiple times proportionally to its fitness.
+		int index = 0;
+		ArrayList<Integer> indexes = new ArrayList<>();
+		for (Individual individual : this.individuals) {
+			int fitness = individual.getFitness();
+			while (fitness-- > 0) {
+				indexes.add(index);
+			}
+			index++;
+		}
+
+		// Pick a random individual from our weighted index
+		// list - more likely to pick stronger individuals
+		// but can still pick worse individuals.
+		while (selected.size() < survivors) {
+			int nextIndex = ThreadLocalRandom.current().nextInt(indexes.size());
+
+			selected.add(this.individuals.get(indexes.get(nextIndex)));
 		}
 
 		return selected;
+	}
+
+	private int size() {
+		return this.individuals.size();
 	}
 
 	private void add(Individual individual) {
@@ -132,12 +153,14 @@ class Population {
 	 * Triggers mutation on a certain percentage of the population.
 	 * @param mutationRate Proportion of the population to mutate (0 to 1).
 	 */
-	public void mutate(float mutationRate) {
+	public Population mutate(float mutationRate) {
 		for (Individual individual : this.individuals) {
 			if (Math.random() <= mutationRate) {
 				individual.mutate();
 			}
 		}
+
+		return this;
 	}
 
 	/**
@@ -155,35 +178,16 @@ class Population {
 	}
 
 	/**
-	 * Executes fitness proportionate selection to reduce the size of the population.
+	 * Reduce the size of the population.
+	 *
 	 * @param populationSize The final size of the population.
 	 */
 	public void cullTo(int populationSize) {
 		this.sort();
 
-		ArrayList<Integer> indexes = new ArrayList<>();
-
-		int index = 0;
-
-		for (Individual individual : this.individuals) {
-			int fitness = individual.getFitness();
-			while (fitness-- > 0) {
-				indexes.add(index);
-			}
-
-			index++;
+		while (this.size() > populationSize) {
+			this.individuals.remove(this.size() - 1);
 		}
-
-		ArrayList<Individual> selected = new ArrayList<>();
-
-		while (selected.size() < populationSize) {
-			int nextIndex = ThreadLocalRandom.current().nextInt(indexes.size());
-
-			selected.add(this.individuals.get(indexes.get(nextIndex)));
-		}
-
-		this.individuals.clear();
-		this.individuals.addAll(selected);
 	}
 
 	public String getBehaviour() {
