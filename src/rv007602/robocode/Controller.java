@@ -7,14 +7,14 @@ public class Controller {
 		int generations = 30;
 		int survivors = 8;
 		int populationSize = 14;
+		int roundsPerBattle = 2;
 		float mutationRate = 0.2f;
 		float crossoverRate = 0.5f;
-
 		String[] enemies = {"sample.SpinBot", "sample.SpinBot"};
 
 		Fitness.setEnemies(enemies);
 
-		Fitness.setRoundsPerBattle(2);
+		Fitness.setRoundsPerBattle(roundsPerBattle);
 
 		Fitness.setVisible(false);
 
@@ -51,8 +51,6 @@ public class Controller {
 			bulk.addRow(population);
 
 			population.cullTo(populationSize);
-
-			output.write(String.format("%d%s\n", i, population));
 		}
 
 		Fitness.cleanUp();
