@@ -139,7 +139,7 @@ class Individual {
 		this.setGenotype(s.toString());
 	}
 
-	private void setGenotype(String genotype) {
+	public void setGenotype(String genotype) {
 		this.genotype = genotype;
 	}
 }

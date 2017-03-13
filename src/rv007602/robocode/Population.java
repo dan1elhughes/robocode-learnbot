@@ -87,7 +87,7 @@ class Population {
 		return this.individuals.size();
 	}
 
-	private void add(Individual individual) {
+	public void add(Individual individual) {
 		this.individuals.add(individual);
 	}
 

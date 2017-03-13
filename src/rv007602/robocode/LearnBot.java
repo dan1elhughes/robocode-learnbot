@@ -11,6 +11,7 @@ public class LearnBot extends AdvancedRobot {
 
 	private ArrayList<Trigger> triggers;
 	public boolean finished = false;
+	private final String override = "";
 
 	/**
 	 * Reads in a genotype and executes the main action loop of the bot.
@@ -48,6 +49,10 @@ public class LearnBot extends AdvancedRobot {
 	}
 
 	private String readFile() throws Exception {
+		if (!this.override.isEmpty()) {
+			return this.override;
+		}
+
 		File f = getDataFile("_bot_data.txt");
 		BufferedReader br = new BufferedReader(new FileReader(f));
 		return br.readLine();
