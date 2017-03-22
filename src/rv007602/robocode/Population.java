@@ -54,30 +54,34 @@ class Population {
 	 * @param survivors The number of individuals to return
 	 * @return A subset of the population
 	 */
-	public Population select(int survivors) {
+	public Population select(int survivors, String type) {
 		this.sort();
-
 		Population selected = new Population(0);
 
-		// Build a list of indexes, where each index is in the
-		// list multiple times proportionally to its fitness.
-		int index = 0;
-		ArrayList<Integer> indexes = new ArrayList<>();
-		for (Individual individual : this.individuals) {
-			int fitness = individual.getFitness();
-			while (fitness-- > 0) {
-				indexes.add(index);
+		if (type.equals("truncation")) {
+			for (int i = 0; i <= survivors; i++) {
+				selected.add(this.individuals.get(i));
 			}
-			index++;
-		}
+		} else if (type.equals("roulette")) {
+			// Build a list of indexes, where each index is in the
+			// list multiple times proportionally to its fitness.
+			int index = 0;
+			ArrayList<Integer> indexes = new ArrayList<>();
+			for (Individual individual : this.individuals) {
+				int fitness = individual.getFitness();
+				while (fitness-- > 0) {
+					indexes.add(index);
+				}
+				index++;
+			}
 
-		// Pick a random individual from our weighted index
-		// list - more likely to pick stronger individuals
-		// but can still pick worse individuals.
-		while (selected.size() < survivors) {
-			int nextIndex = ThreadLocalRandom.current().nextInt(indexes.size());
-
-			selected.add(this.individuals.get(indexes.get(nextIndex)));
+			// Pick a random individual from our weighted index
+			// list - more likely to pick stronger individuals
+			// but can still pick worse individuals.
+			while (selected.size() < survivors) {
+				int nextIndex = ThreadLocalRandom.current().nextInt(indexes.size());
+				selected.add(this.individuals.get(indexes.get(nextIndex)));
+			}
 		}
 
 		return selected;

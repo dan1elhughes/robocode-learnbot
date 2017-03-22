@@ -37,7 +37,7 @@ class Controller {
 			System.out.println("== Generation " + i);
 
 			Population offspring = population
-				.select(populationSize - elites)
+				.select(populationSize - elites, "roulette")
 				.crossover(crossoverRate)
 				.mutate(mutationRate);
 
