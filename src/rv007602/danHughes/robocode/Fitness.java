@@ -1,4 +1,4 @@
-package rv007602.robocode;
+package rv007602.danHughes.robocode;
 
 import robocode.control.BattleSpecification;
 import robocode.control.BattlefieldSpecification;
@@ -37,7 +37,7 @@ class Fitness {
 	private static void prepare(Individual individual) throws Exception {
 		String genotype = individual.getGenotype();
 
-		File f = new File("out\\production\\Robocode\\rv007602\\robocode\\LearnBot.data\\_bot_data.txt");
+		File f = new File("out\\production\\Robocode\\rv007602\\danHughes\\robocode\\LearnBot.data\\_bot_data.txt");
 
 		f.getParentFile().mkdirs();
 
@@ -105,7 +105,7 @@ class Fitness {
 			// Called when the battle is completed successfully with battle results
 			public void onBattleCompleted(BattleCompletedEvent e) {
 				for (robocode.BattleResults battleResult : e.getSortedResults()) {
-					if (battleResult.getTeamLeaderName().equals("rv007602.robocode.LearnBot*")) {
+					if (battleResult.getTeamLeaderName().equals("rv007602.danHughes.robocode.LearnBot*")) {
 						Fitness.score.add(battleResult.getScore());
 					}
 				}
@@ -122,7 +122,7 @@ class Fitness {
 
 		// Credit to Rhys Streefland for discovering that it needs
 		// an asterisk after package name for some reason
-		String bots = "rv007602.robocode.LearnBot*";
+		String bots = "rv007602.danHughes.robocode.LearnBot*";
 
 		for (String enemy : Fitness.enemies) {
 			bots += "," + enemy;

@@ -1,4 +1,4 @@
-package rv007602.robocode;
+package rv007602.danHughes.robocode;
 
 import java.util.concurrent.ThreadLocalRandom;
 
